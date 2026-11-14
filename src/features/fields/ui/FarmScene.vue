@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import type { Plot } from "../../../shared/contracts";
 import { items } from "../../../shared/catalog";
-import { growthStage, sceneTrees } from "../lib/scene";
+import { growthStage } from "../lib/scene";
 import { ready } from "../lib/crops";
-defineProps<{ plots: readonly Readonly<Plot>[]; weather: string }>();
-defineEmits<{ plot: [id: number] }>();
+defineProps<{
+  plots: readonly Readonly<Plot>[];
+  weather: string;
+  activePlotId: string;
+}>();
+defineEmits<{ plot: [id: string] }>();
 </script>
 <template>
   <div class="farm-scene" :class="weather">
@@ -13,13 +17,13 @@ defineEmits<{ plot: [id: number] }>();
     <div class="mountain"></div>
     <div class="forest">
       <div
-        v-for="(tree, i) in sceneTrees"
+        v-for="i in 8"
         :key="i"
         class="pixel-tree"
         :style="{
-          left: tree.left,
-          top: tree.top,
-          transform: `scale(${tree.scale})`,
+          left: `${(i - 1) * 13 + 1}%`,
+          top: `${i % 2 ? 4 : 0}px`,
+          transform: `scale(${1 + ((i - 1) % 3) * 0.12})`,
         }"
       ></div>
     </div>
@@ -32,12 +36,15 @@ defineEmits<{ plot: [id: number] }>();
     <div class="windmill">✣<i></i></div>
     <div class="pond"><i></i></div>
     <div class="fence">╬ ╬ ╬ ╬ ╬ ╬ ╬ ╬ ╬ ╬ ╬ ╬</div>
-    <div class="field-grid">
+    <div class="field-grid" :class="{ expanded: plots.length > 12 }">
       <button
         v-for="plot in plots"
         :key="plot.id"
         class="plot"
-        :class="{ 'is-ready': plot.crop && ready(plot.crop) }"
+        :class="{
+          'is-ready': plot.crop && ready(plot.crop),
+          'is-active': plot.id === activePlotId,
+        }"
         :data-plot="plot.id"
         @click="$emit('plot', plot.id)"
       >

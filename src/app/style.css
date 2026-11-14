@@ -802,6 +802,207 @@ progress {
   accent-color: #8eaa70;
   border: 0;
 }
+/* ===== 开垦地图 ===== */
+.field-grid.expanded {
+  grid-template-columns: repeat(auto-fit, minmax(52px, 1fr));
+}
+.plot.is-active {
+  outline: 2px solid #e8d271;
+  outline-offset: 1px;
+}
+.map-panel .panel-heading span {
+  font-size: 9px;
+}
+.chunk-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+.chunk-tabs button {
+  font-size: 10px;
+  padding: 5px 8px;
+  background: #f4f6ea;
+}
+.chunk-tabs button.active {
+  background: #456e46;
+  color: #fff;
+  border-color: #456e46;
+}
+.map-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.map-tile {
+  position: relative;
+  height: 74px;
+  padding: 0;
+  border-radius: 5px;
+  border: 2px solid #c9d2b4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #b6cf8e;
+}
+.map-tile .terrain-icon {
+  font-size: 24px;
+  filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.15));
+}
+.map-tile .fertile-mark {
+  color: #7a5a34;
+  font-size: 20px;
+  opacity: 0.55;
+}
+.map-tile .mini-crop {
+  position: absolute;
+  right: 4px;
+  bottom: 2px;
+  font-size: 13px;
+  font-style: normal;
+}
+.map-tile .elevation {
+  position: absolute;
+  left: 3px;
+  top: 2px;
+  font-size: 8px;
+  font-style: normal;
+  color: #fff;
+  background: #8a6f41;
+  border-radius: 3px;
+  padding: 1px 3px;
+}
+.terrain-fertile {
+  background: #987448;
+  border-color: #b28b54;
+}
+.terrain-grass {
+  background: #a9c87e;
+}
+.terrain-wasteland {
+  background: #c3a983;
+}
+.terrain-rocky {
+  background: #a9aba2;
+}
+.terrain-forest {
+  background: #7fa06a;
+}
+.map-tile.is-hover {
+  outline: 2px solid #d8a849;
+  outline-offset: 1px;
+}
+.map-tile.is-path {
+  box-shadow: inset 0 0 0 2px #e8d271;
+}
+.map-tile.is-active-plot {
+  outline: 2px solid #e8d271;
+  outline-offset: 1px;
+}
+.project-flag {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 8px;
+  font-weight: 600;
+  color: #fff;
+  padding: 2px 0;
+  background: #8a6f41;
+}
+.project-flag.st-ready {
+  background: #456e46;
+}
+.project-flag.st-building {
+  background: #c39b39;
+}
+.project-flag.st-planned {
+  background: #7f8e70;
+}
+.reclaim-preview {
+  margin-top: 14px;
+  border: 1px dashed #c8d2b2;
+  border-radius: 6px;
+  padding: 12px;
+  background: #f8faf1;
+}
+.preview-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.preview-head small {
+  font-size: 9px;
+}
+.preview-label {
+  font-size: 10px;
+  color: #456e46;
+  background: #e6efd8;
+  border-radius: 4px;
+  padding: 3px 7px;
+}
+.preview-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 11px;
+  color: #5b6f4c;
+  margin-bottom: 8px;
+}
+.preview-note {
+  font-size: 10px;
+  color: #98a18d;
+  margin-bottom: 8px;
+}
+.preview-warn {
+  font-size: 10px;
+  color: #b06a3c;
+}
+.preview-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.project-list {
+  margin-top: 14px;
+  display: grid;
+  gap: 8px;
+}
+.project-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e7e9dc;
+  border-left: 3px solid #7f8e70;
+  border-radius: 5px;
+  padding: 9px 11px;
+}
+.project-row.st-ready {
+  border-left-color: #456e46;
+}
+.project-row.st-building {
+  border-left-color: #c39b39;
+}
+.project-row > div {
+  flex: 1;
+}
+.project-row small {
+  display: block;
+  margin-top: 3px;
+}
+.status-tag {
+  font-size: 9px;
+  color: #7f8e70;
+}
+.project-row button {
+  font-size: 10px;
+  padding: 5px 9px;
+}
+.plot-details small {
+  font-size: 9px;
+  margin-left: 4px;
+}
 @media (max-width: 1000px) {
   main {
     padding: 25px;

@@ -88,9 +88,10 @@ export function createWarehouse(now: () => number, notice: Notice) {
       const expired = state.batches.filter((b) => b.expires <= hour);
       state.wasted += expired.reduce((n, b) => n + b.quantity, 0);
       state.batches = state.batches.filter((b) => b.expires > hour);
+      // 清理指向过期批次的占用（含开垦工具占用），避免悬空凭据
+      const expiredIds = new Set(expired.map((b) => b.id));
       state.reservations = state.reservations.filter(
-        (r) =>
-          !r.allocations.some((a) => expired.some((b) => b.id === a.batch)),
+        (r) => !r.allocations.some((a) => expiredIds.has(a.batch)),
       );
       if (expired.length) notice(`${expired.length} 批库存已到保质期`);
     },

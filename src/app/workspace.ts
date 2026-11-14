@@ -4,7 +4,7 @@ import { createFields } from "../features/fields";
 import { createWarehouse } from "../features/warehouse";
 import { createWorkshop } from "../features/workshop";
 import { createOrders, salePrice } from "../features/orders";
-import { items } from "../shared/catalog";
+import { items, isTool } from "../shared/catalog";
 import { saveFarm, loadFarm } from "./persistence";
 export function createWorkspace() {
   const notices = ref<string[]>(["欢迎回到青禾农场。先备一份胡萝卜订单吧。"]);
@@ -14,7 +14,18 @@ export function createWorkspace() {
   const clock = createClock();
   const warehouse = createWarehouse(() => clock.state.hour, notice);
   const orders = createOrders(warehouse, notice, clock.state.hour);
-  const fields = createFields(orders.spend, warehouse.add, notice);
+  // 开垦端口：资金由订单账本托管/退还，工具占用走谷仓同一套预留凭据
+  const fields = createFields(
+    {
+      spend: orders.spend,
+      refund: orders.earn,
+      reserve: warehouse.reserve,
+      consume: warehouse.consume,
+      release: warehouse.release,
+    },
+    warehouse.add,
+    notice,
+  );
   const workshop = createWorkshop(
     { ...warehouse, spend: orders.spend },
     notice,
@@ -45,6 +56,12 @@ export function createWorkspace() {
     engine,
     notices,
     sell(id: string) {
+      // 工具是开垦生产资料，不可出售，避免资金与工具占用状态错乱
+      const batch = warehouse.state.batches.find((b) => b.id === id);
+      if (batch && isTool(batch.item)) {
+        notice("工具是开垦生产资料，不能出售");
+        return;
+      }
       const item = warehouse.sell(id, 1);
       if (item) {
         orders.earn(salePrice(items[item].value));

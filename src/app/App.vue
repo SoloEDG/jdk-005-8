@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from "vue";
 import { ClockPanel, weatherAt } from "../features/clock";
-import { FarmScene, FieldsPanel } from "../features/fields";
+import { FarmScene, FieldsPanel, MapPanel } from "../features/fields";
 import { WarehousePanel } from "../features/warehouse";
 import { WorkshopPanel } from "../features/workshop";
 import { OrdersPanel, EconomyPanel } from "../features/orders";
 import { createWorkspace } from "./workspace";
 const farm = createWorkspace(),
-  active = ref(0),
   tab = ref("warehouse");
 const { clock, warehouse, fields, workshop, orders, engine, notices } = farm;
 const timer = setInterval(() => {
@@ -64,15 +63,28 @@ function reset() {
           <FarmScene
             :plots="fields.state.plots"
             :weather="weatherAt(clock.state.hour)"
-            @plot="(id) => (active = id)"
+            :active-plot-id="fields.state.activePlotId"
+            @plot="(id) => fields.selectPlot(id)"
           /><FieldsPanel
             :plots="fields.state.plots"
             :selected="fields.state.selected"
-            :active="active"
+            :active-plot-id="fields.state.activePlotId"
             @select="fields.select"
             @plant="(id) => fields.plant(id, clock.state.hour)"
             @water="fields.water"
             @harvest="fields.harvest"
+          />
+          <MapPanel
+            :tiles="fields.state.tiles"
+            :plots="fields.state.plots"
+            :projects="fields.state.projects"
+            :hour="clock.state.hour"
+            :active-plot-id="fields.state.activePlotId"
+            @select-plot="(id) => fields.selectPlot(id)"
+            @preview="() => undefined"
+            @plan="(tileId) => fields.planReclaim(tileId)"
+            @cancel="fields.cancelProject"
+            @start="(id) => fields.startBuild(id, clock.state.hour)"
           />
           <section class="activity">
             <span>农场手记</span>
